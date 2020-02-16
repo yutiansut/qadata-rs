@@ -16,12 +16,11 @@ pub struct QAMongoClient {
 }
 
 impl QAMongoClient {
-    pub fn new() -> Self {
-        let uri = "mongodb://localhost:27017";
+    pub fn new(uri: &str, database: &str) -> Self {
         let mut client_options = ClientOptions::parse(uri).unwrap();
         client_options.app_name = Some("QUANTAXIS".to_string());
         let client = Client::with_options(client_options).unwrap();
-        let db = client.database("quantaxis");
+        let db = client.database(database);
         Self {
             uri: uri.to_string(),
             database: db,
