@@ -4,10 +4,9 @@ use mongodb::{Client, options::ClientOptions};
 use mongodb::Database;
 use mongodb::options::FindOptions;
 
-use bson::Bson::Array;
 use bson::{Bson, oid};
 use bson::{bson, doc};
-
+use bson::Bson::Array;
 use bson::Document;
 
 use crate::qautil::{future_day, future_min, stock_day, stock_min};
@@ -106,24 +105,25 @@ impl QAMongoClient {
         }
         res
     }
-    pub fn get_stock_realtime(&mut self, code: Vec<&str>, start: &str, end: &str, frequence: &str) -> Vec<future_min> {
-        let collection = self.database.collection("stock_realtime_min");
 
-        let filter = doc! {"code": {"$in": Array(code)}, "type": frequence, "datetime": {"$gte": start, "$lte": end}};
-        let find_options = FindOptions::builder().build();
-        let cursor = collection.find(filter, find_options).unwrap();
-
-        let mut res = Vec::new();
-        for result in cursor {
-            match result {
-                Ok(document) => {
-                    let u: future_min = bson::from_bson(bson::Bson::Document(document)).unwrap();
-                    res.push(u);
-                }
-                Err(e) => { println!("ERROR"); } //return Err(e.into()),
-            }
-        }
-        res
-    }
+    // pub fn get_stock_realtime(&mut self, code: Vec<&str>, start: &str, end: &str, frequence: &str) -> Vec<future_min> {
+    //     let collection = self.database.collection("stock_realtime_min");
+    //
+    //     let filter = doc! {"code": {"$in": Array(code)}, "type": frequence, "datetime": {"$gte": start, "$lte": end}};
+    //     let find_options = FindOptions::builder().build();
+    //     let cursor = collection.find(filter, find_options).unwrap();
+    //
+    //     let mut res = Vec::new();
+    //     for result in cursor {
+    //         match result {
+    //             Ok(document) => {
+    //                 let u: future_min = bson::from_bson(bson::Bson::Document(document)).unwrap();
+    //                 res.push(u);
+    //             }
+    //             Err(e) => { println!("ERROR"); } //return Err(e.into()),
+    //         }
+    //     }
+    //     res
+    // }
 }
 
