@@ -33,7 +33,7 @@ impl QAMongoClient {
 
         let filter = doc! {"code": code,
                                             "date": {"$gte": start, "$lte": end}};
-        let find_options = FindOptions::builder().build();
+        let find_options = FindOptions::builder().sort(doc!{"date":1}).build();
         let cursor = collection.find(filter, find_options).unwrap();
         let mut res = Vec::new();
         for result in cursor {
@@ -52,7 +52,7 @@ impl QAMongoClient {
         let collection = self.database.collection("stock_min");
 
         let filter = doc! {"code":code, "type": frequence, "datetime": {"$gte": start, "$lte": end}};
-        let find_options = FindOptions::builder().build();
+        let find_options = FindOptions::builder().sort(doc!{"datetime":1}).build();
         let cursor = collection.find(filter, find_options).unwrap();
 
         let mut res = Vec::new();
@@ -72,7 +72,7 @@ impl QAMongoClient {
 
         let filter = doc! {"code": code,
                                             "date": {"$gte": start, "$lte": end}};
-        let find_options = FindOptions::builder().build();
+        let find_options = FindOptions::builder().sort(doc!{"date":1}).build();
         let cursor = collection.find(filter, find_options).unwrap();
         let mut res = Vec::new();
         for result in cursor {
@@ -90,7 +90,7 @@ impl QAMongoClient {
         let collection = self.database.collection("future_min");
 
         let filter = doc! {"code":code, "type": frequence, "datetime": {"$gte": start, "$lte": end}};
-        let find_options = FindOptions::builder().build();
+        let find_options = FindOptions::builder().sort(doc!{"datetime":1}).build();
         let cursor = collection.find(filter, find_options).unwrap();
 
         let mut res = Vec::new();
