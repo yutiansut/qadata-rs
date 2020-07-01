@@ -1,6 +1,6 @@
 use std::path::Prefix::Verbatim;
 
-use mongodb::{Client, options::ClientOptions};
+use mongodb::{Client, Collection, options::ClientOptions};
 use mongodb::Database;
 use mongodb::options::FindOptions;
 
@@ -12,8 +12,8 @@ use bson::Document;
 use crate::qautil::{future_day, future_min, stock_day, stock_min};
 
 pub struct QAMongoClient {
-    uri: String,
-    database: Database,
+    pub uri: String,
+    pub database: Database,
 }
 
 impl QAMongoClient {
@@ -104,6 +104,10 @@ impl QAMongoClient {
             }
         }
         res
+    }
+
+    pub fn get_collection(&mut self, collection: &str) -> Collection{
+        self.database.collection(collection)
     }
 
     // pub fn get_stock_realtime(&mut self, code: Vec<&str>, start: &str, end: &str, frequence: &str) -> Vec<future_min> {
