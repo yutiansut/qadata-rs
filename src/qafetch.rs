@@ -27,7 +27,7 @@ impl QAMongoClient {
             database: db,
         }
     }
-    pub fn get_stocks_day(&mut self, code: Vec[String], start: &str, end: &str) -> Vec<stock_day> {
+    pub fn get_stocks_day(&mut self, code: Vec<String>, start: &str, end: &str) -> Vec<stock_day> {
         let collection = self.database.collection("stock_day");
 
         let filter = doc! {"code": {"$in": code},
