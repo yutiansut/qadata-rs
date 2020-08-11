@@ -29,11 +29,11 @@ impl QAMongoClient {
     }
     pub fn get_stocks_day(&mut self, code: Vec<String>, start: &str, end: &str) -> Vec<stock_day> {
         let collection = self.database.collection("stock_day");
-
+        println!("start {} end {}", start, end);
         let filter = doc! {"code": {"$in": code},
                                             "date": {"$gte": start, "$lte": end}};
         let find_options = FindOptions::builder().sort(doc!{"date_stamp":1}).build();
-        let cursor = collection.find(filter, None).unwrap();
+        let cursor = collection.find(filter, find_options).unwrap();
         let mut res = Vec::new();
         for result in cursor {
             match result {
