@@ -33,7 +33,7 @@ impl QAMongoClient {
         let filter = doc! {"code": {"$in": code},
                                             "date": {"$gte": start, "$lte": end}};
         let find_options = FindOptions::builder().sort(doc!{"date_stamp":1}).build();
-        let cursor = collection.find(filter, find_options).unwrap();
+        let cursor = collection.find(filter, None).unwrap();
         let mut res = Vec::new();
         for result in cursor {
             match result {
@@ -53,7 +53,7 @@ impl QAMongoClient {
         let filter = doc! {"code": code,
                                             "date": {"$gte": start, "$lte": end}};
         let find_options = FindOptions::builder().sort(doc!{"date_stamp":1}).build();
-        let cursor = collection.find(filter, None).unwrap();
+        let cursor = collection.find(filter, find_options).unwrap();
         let mut res = Vec::new();
         for result in cursor {
             match result {
