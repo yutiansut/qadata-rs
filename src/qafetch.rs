@@ -1,6 +1,6 @@
 use std::path::Prefix::Verbatim;
 
-use mongodb::{Client, options::ClientOptions};
+use mongodb::{Client, Collection, options::ClientOptions};
 use mongodb::Database;
 use mongodb::options::FindOptions;
 
@@ -12,8 +12,8 @@ use bson::Document;
 use crate::qautil::{future_day, future_min, stock_day, stock_min};
 
 pub struct QAMongoClient {
-    uri: String,
-    database: Database,
+    pub uri: String,
+    pub database: Database,
 }
 
 impl QAMongoClient {
@@ -26,6 +26,25 @@ impl QAMongoClient {
             uri: uri.to_string(),
             database: db,
         }
+    }
+    pub fn get_stocks_day(&mut self, code: Vec<String>, start: &str, end: &str) -> Vec<stock_day> {
+        let collection = self.database.collection("stock_day");
+
+        let filter = doc! {"code": {"$in": code},
+                                            "date": {"$gte": start, "$lte": end}};
+        let find_options = FindOptions::builder().sort(doc!{"date":1}).build();
+        let cursor = collection.find(filter, find_options).unwrap();
+        let mut res = Vec::new();
+        for result in cursor {
+            match result {
+                Ok(document) => {
+                    let u: stock_day = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    res.push(u);
+                }
+                Err(e) => { println!("ERROR"); } //return Err(e.into()),
+            }
+        }
+        res
     }
 
     pub fn get_stock_day(&mut self, code: &str, start: &str, end: &str) -> Vec<stock_day> {
@@ -104,6 +123,10 @@ impl QAMongoClient {
             }
         }
         res
+    }
+
+    pub fn get_collection(&mut self, collection: &str) -> Collection{
+        self.database.collection(collection)
     }
 
     // pub fn get_stock_realtime(&mut self, code: Vec<&str>, start: &str, end: &str, frequence: &str) -> Vec<future_min> {
