@@ -1,13 +1,16 @@
 use std::path::Prefix::Verbatim;
 
-use mongodb::{Client, Collection, options::ClientOptions};
-use mongodb::Database;
-use mongodb::options::FindOptions;
 
-use bson::{Bson, oid};
-use bson::{bson, doc};
-use bson::Bson::Array;
-use bson::Document;
+pub use mongodb::{
+    bson::{doc, Bson, Document},
+    error::Result,
+    options::{
+        DeleteOptions, FindOneOptions, FindOptions, InsertOneOptions, UpdateModifications,
+        UpdateOptions,ClientOptions
+    },
+    results::{DeleteResult, InsertManyResult, InsertOneResult, UpdateResult},
+    sync::{Client, Collection, Cursor, Database},
+};
 use chrono::{DateTime, FixedOffset, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 
 
@@ -40,14 +43,14 @@ impl QAMongoClient {
         let collection = self.database.collection("stock_day");
         //println!("start {} end {}", start, end);
         let filter = doc! {"code": {"$in": code},
-                                            "date_stamp": {"$gte": to_timestamp(start.to_string()), "$lte":  to_timestamp(end.to_string())}};
-        let find_options = FindOptions::builder().sort(doc!{"date_stamp":1}).build();
+                                            "date": {"$gte": start, "$lte": end}};
+        let find_options = FindOptions::builder().sort(doc!{"date_stamp":1}).batch_size(Option::from(10000000)).build();
         let cursor = collection.find(filter, find_options).unwrap();
         let mut res = Vec::new();
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_day = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    let u: stock_day = bson::from_bson(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -67,7 +70,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_day = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    let u: stock_day = bson::from_bson(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -87,7 +90,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_min = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    let u: stock_min = bson::from_bson(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -106,7 +109,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: future_day = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    let u: future_day = bson::from_bson(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -125,7 +128,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: future_min = bson::from_bson(bson::Bson::Document(document)).unwrap();
+                    let u: future_min = bson::from_bson(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
