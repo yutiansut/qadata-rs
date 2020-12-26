@@ -1,5 +1,5 @@
 use qadata_rs::qafetch::QAMongoClient;
-use qadata_rs::qautil::stock_min;
+use mifi_rs::kline::stock_min;
 
 fn main() {
     let mut dataclient = QAMongoClient::new("mongodb://192.168.2.118:27017", "quantaxis");
