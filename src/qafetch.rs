@@ -14,7 +14,7 @@ pub use mongodb::{
 use chrono::{DateTime, FixedOffset, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 
 
-use crate::qautil::{future_day, future_min, stock_day, stock_min};
+use mifi_rs::kline::{future_day, future_min, stock_day, stock_min};
 
 fn to_timestamp(date: String) -> i64{
     Utc.datetime_from_str(format!("{} 00:00:00", date).as_str(), "%Y-%m-%d %H:%M:%S")
