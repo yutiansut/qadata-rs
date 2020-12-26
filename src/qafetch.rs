@@ -30,9 +30,11 @@ pub struct QAMongoClient {
 
 impl QAMongoClient {
     pub fn new(uri: &str, database: &str) -> Self {
-        let mut client_options = ClientOptions::parse(uri).unwrap();
-        client_options.app_name = Some("QUANTAXIS".to_string());
-        let client = Client::with_options(client_options).unwrap();
+        // let mut client_options = ClientOptions::(uri).unwrap();
+        // client_options.app_name = Some("QUANTAXIS".to_string());
+        // let client = Client::with_options(client_options).unwrap();
+
+        let client = Client::with_uri_str(uri).unwrap();
         let db = client.database(database);
         Self {
             uri: uri.to_string(),
@@ -50,7 +52,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_day = bson::from_bson(document).unwrap();
+                    let u: stock_day = bson::from_document(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -70,7 +72,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_day = bson::from_bson(document).unwrap();
+                    let u: stock_day = bson::from_document(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -90,7 +92,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: stock_min = bson::from_bson(document).unwrap();
+                    let u: stock_min = bson::from_document(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -109,7 +111,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: future_day = bson::from_bson(document).unwrap();
+                    let u: future_day = bson::from_document(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
@@ -128,7 +130,7 @@ impl QAMongoClient {
         for result in cursor {
             match result {
                 Ok(document) => {
-                    let u: future_min = bson::from_bson(document).unwrap();
+                    let u: future_min = bson::from_document(document).unwrap();
                     res.push(u);
                 }
                 Err(e) => { println!("ERROR"); } //return Err(e.into()),
