@@ -5,8 +5,18 @@ authors = ["yutiansut <yutiansut@qq.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+    "arrow_deps"]
+
+[profile.release]
+debug = true
+
+[profile.bench]
+debug = true
 
 [dependencies]
+arrow_deps = { path = "arrow_deps" }
 mongodb = {version = "1.1.0", default-features = false,features = ["sync"]}
 bson = "1.1.0"
 serde_json = "*"
