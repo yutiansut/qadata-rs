@@ -7,3 +7,5 @@
 pub use arrow;
 pub use datafusion;
 pub use parquet;
+#[macro_use]
+pub use parquet_derive;
