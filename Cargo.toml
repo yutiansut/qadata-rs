@@ -26,4 +26,4 @@ chrono = "0.4.13"
 influxdb = { version = "0.3.0", features = ["derive"] }
 stopwatch ="*"
 
-mifi-rs = { git="https://github.com/quantaxis/mifi-rs.git"}
+mifi-rs = "0.3.0"
