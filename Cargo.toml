@@ -5,9 +5,7 @@ authors = ["yutiansut <yutiansut@qq.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[workspace]
-members = [
-    "arrow_deps"]
+
 
 [profile.release]
 debug = true
@@ -16,7 +14,7 @@ debug = true
 debug = true
 
 [dependencies]
-arrow_deps = { path = "arrow_deps" }
+
 mongodb = {version = "1.1.0", default-features = false,features = ["sync"]}
 bson = "1.1.0"
 serde_json = "*"
@@ -25,5 +23,5 @@ serde = { version = "1.0", features = ["derive"] } # 序列化
 chrono = "0.4.13"
 influxdb = { version = "0.3.0", features = ["derive"] }
 stopwatch ="*"
-
+clickhouse-rs= '*'
 mifi-rs = "0.3.0"
